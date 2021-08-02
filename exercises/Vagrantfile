@@ -2,19 +2,19 @@
 ENV["TERM"]="linux"
 
 Vagrant.configure("2") do |config|
-  
-  # set the image for the vagrant box
-  config.vm.box = "opensuse/Leap-15.2.x86_64"
-  ## Set the image version
-  # config.vm.box_version = "15.2.31.212"
+  config.vm.box = "freebsd/FreeBSD-11.1-RELEASE"
 
-  # st the static IP for the vagrant box
-  config.vm.network "private_network", ip: "192.168.50.4"
-  
-  # consifure the parameters for VirtualBox provider
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "4096"
-    vb.cpus = 4
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+  config.vm.guest = :freebsd
+  config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+  config.ssh.shell = "sh"
+  config.vm.base_mac = "080027D14C66"
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--cpus", "1"]
+    vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+    vb.customize ["modifyvm", :id, "--audio", "none"]
+    vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
+    vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
   end
 end
